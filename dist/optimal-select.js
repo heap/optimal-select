@@ -425,147 +425,149 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var validate = null;
 	    var instruction = null;
 
-	    switch (true) {
+	    (function () {
+	      switch (true) {
 
-	      // child: '>'
-	      case />/.test(type):
-	        instruction = function checkParent(node) {
-	          return function (validate) {
-	            return validate(node.parent) && node.parent;
+	        // child: '>'
+	        case />/.test(type):
+	          instruction = function checkParent(node) {
+	            return function (validate) {
+	              return validate(node.parent) && node.parent;
+	            };
 	          };
-	        };
-	        break;
+	          break;
 
-	      // class: '.'
-	      case /^\./.test(type):
-	        var names = type.substr(1).split('.');
-	        validate = function validate(node) {
-	          var nodeClassName = node.attribs.class;
-	          return nodeClassName && names.every(function (name) {
-	            return nodeClassName.indexOf(name) > -1;
-	          });
-	        };
-	        instruction = function checkClass(node, root) {
-	          if (discover) {
-	            return node.getElementsByClassName(names.join(' '));
-	          }
-	          return typeof node === 'function' ? node(validate) : getAncestor(node, root, validate);
-	        };
-	        break;
-
-	      // attribute: '[key="value"]'
-	      case /^\[/.test(type):
-	        var _type$replace$split = type.replace(/\[|\]|"/g, '').split('=');
-
-	        var _type$replace$split2 = _slicedToArray(_type$replace$split, 2);
-
-	        var attributeKey = _type$replace$split2[0];
-	        var attributeValue = _type$replace$split2[1];
-
-	        validate = function validate(node) {
-	          var hasAttribute = Object.keys(node.attribs).indexOf(attributeKey) > -1;
-	          if (hasAttribute) {
-	            // regard optional attributeValue
-	            if (!attributeValue || node.attribs[attributeKey] === attributeValue) {
-	              return true;
+	        // class: '.'
+	        case /^\./.test(type):
+	          var names = type.substr(1).split('.');
+	          validate = function validate(node) {
+	            var nodeClassName = node.attribs.class;
+	            return nodeClassName && names.every(function (name) {
+	              return nodeClassName.indexOf(name) > -1;
+	            });
+	          };
+	          instruction = function checkClass(node, root) {
+	            if (discover) {
+	              return node.getElementsByClassName(names.join(' '));
 	            }
-	          }
-	          return false;
-	        };
-	        instruction = function checkAttribute(node, root) {
-	          if (discover) {
-	            var _ret = function () {
-	              var NodeList = [];
-	              traverseDescendants([node], function (descendant) {
-	                if (validate(descendant)) {
-	                  NodeList.push(descendant);
-	                }
-	              });
-	              return {
-	                v: NodeList
-	              };
-	            }();
+	            return typeof node === 'function' ? node(validate) : getAncestor(node, root, validate);
+	          };
+	          break;
 
-	            if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
-	          }
-	          return typeof node === 'function' ? node(validate) : getAncestor(node, root, validate);
-	        };
-	        break;
+	        // attribute: '[key="value"]'
+	        case /^\[/.test(type):
+	          var _type$replace$split = type.replace(/\[|\]|"/g, '').split('=');
 
-	      // id: '#'
-	      case /^#/.test(type):
-	        var id = type.substr(1);
-	        validate = function validate(node) {
-	          return node.attribs.id === id;
-	        };
-	        instruction = function checkId(node, root) {
-	          if (discover) {
-	            var _ret2 = function () {
-	              var NodeList = [];
-	              traverseDescendants([node], function (descendant, done) {
-	                if (validate(descendant)) {
-	                  NodeList.push(descendant);
-	                  done();
-	                }
-	              });
-	              return {
-	                v: NodeList
-	              };
-	            }();
+	          var _type$replace$split2 = _slicedToArray(_type$replace$split, 2);
 
-	            if ((typeof _ret2 === 'undefined' ? 'undefined' : _typeof(_ret2)) === "object") return _ret2.v;
-	          }
-	          return typeof node === 'function' ? node(validate) : getAncestor(node, root, validate);
-	        };
-	        break;
+	          var attributeKey = _type$replace$split2[0];
+	          var attributeValue = _type$replace$split2[1];
 
-	      // universal: '*'
-	      case /\*/.test(type):
-	        validate = function validate(node) {
-	          return true;
-	        };
-	        instruction = function checkUniversal(node, root) {
-	          if (discover) {
-	            var _ret3 = function () {
-	              var NodeList = [];
-	              traverseDescendants([node], function (descendant) {
-	                return NodeList.push(descendant);
-	              });
-	              return {
-	                v: NodeList
-	              };
-	            }();
+	          validate = function validate(node) {
+	            var hasAttribute = Object.keys(node.attribs).indexOf(attributeKey) > -1;
+	            if (hasAttribute) {
+	              // regard optional attributeValue
+	              if (!attributeValue || node.attribs[attributeKey] === attributeValue) {
+	                return true;
+	              }
+	            }
+	            return false;
+	          };
+	          instruction = function checkAttribute(node, root) {
+	            if (discover) {
+	              var _ret2 = function () {
+	                var NodeList = [];
+	                traverseDescendants([node], function (descendant) {
+	                  if (validate(descendant)) {
+	                    NodeList.push(descendant);
+	                  }
+	                });
+	                return {
+	                  v: NodeList
+	                };
+	              }();
 
-	            if ((typeof _ret3 === 'undefined' ? 'undefined' : _typeof(_ret3)) === "object") return _ret3.v;
-	          }
-	          return typeof node === 'function' ? node(validate) : getAncestor(node, root, validate);
-	        };
-	        break;
+	              if ((typeof _ret2 === 'undefined' ? 'undefined' : _typeof(_ret2)) === "object") return _ret2.v;
+	            }
+	            return typeof node === 'function' ? node(validate) : getAncestor(node, root, validate);
+	          };
+	          break;
 
-	      // tag: '...'
-	      default:
-	        validate = function validate(node) {
-	          return node.name === type;
-	        };
-	        instruction = function checkTag(node, root) {
-	          if (discover) {
-	            var _ret4 = function () {
-	              var NodeList = [];
-	              traverseDescendants([node], function (descendant) {
-	                if (validate(descendant)) {
-	                  NodeList.push(descendant);
-	                }
-	              });
-	              return {
-	                v: NodeList
-	              };
-	            }();
+	        // id: '#'
+	        case /^#/.test(type):
+	          var id = type.substr(1);
+	          validate = function validate(node) {
+	            return node.attribs.id === id;
+	          };
+	          instruction = function checkId(node, root) {
+	            if (discover) {
+	              var _ret3 = function () {
+	                var NodeList = [];
+	                traverseDescendants([node], function (descendant, done) {
+	                  if (validate(descendant)) {
+	                    NodeList.push(descendant);
+	                    done();
+	                  }
+	                });
+	                return {
+	                  v: NodeList
+	                };
+	              }();
 
-	            if ((typeof _ret4 === 'undefined' ? 'undefined' : _typeof(_ret4)) === "object") return _ret4.v;
-	          }
-	          return typeof node === 'function' ? node(validate) : getAncestor(node, root, validate);
-	        };
-	    }
+	              if ((typeof _ret3 === 'undefined' ? 'undefined' : _typeof(_ret3)) === "object") return _ret3.v;
+	            }
+	            return typeof node === 'function' ? node(validate) : getAncestor(node, root, validate);
+	          };
+	          break;
+
+	        // universal: '*'
+	        case /\*/.test(type):
+	          validate = function validate(node) {
+	            return true;
+	          };
+	          instruction = function checkUniversal(node, root) {
+	            if (discover) {
+	              var _ret4 = function () {
+	                var NodeList = [];
+	                traverseDescendants([node], function (descendant) {
+	                  return NodeList.push(descendant);
+	                });
+	                return {
+	                  v: NodeList
+	                };
+	              }();
+
+	              if ((typeof _ret4 === 'undefined' ? 'undefined' : _typeof(_ret4)) === "object") return _ret4.v;
+	            }
+	            return typeof node === 'function' ? node(validate) : getAncestor(node, root, validate);
+	          };
+	          break;
+
+	        // tag: '...'
+	        default:
+	          validate = function validate(node) {
+	            return node.name === type;
+	          };
+	          instruction = function checkTag(node, root) {
+	            if (discover) {
+	              var _ret5 = function () {
+	                var NodeList = [];
+	                traverseDescendants([node], function (descendant) {
+	                  if (validate(descendant)) {
+	                    NodeList.push(descendant);
+	                  }
+	                });
+	                return {
+	                  v: NodeList
+	                };
+	              }();
+
+	              if ((typeof _ret5 === 'undefined' ? 'undefined' : _typeof(_ret5)) === "object") return _ret5.v;
+	            }
+	            return typeof node === 'function' ? node(validate) : getAncestor(node, root, validate);
+	          };
+	      }
+	    })();
 
 	    if (!pseudo) {
 	      return instruction;
@@ -709,6 +711,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      ignoreClass = true;
 	    }
 	    var predicate = ignore[type];
+	    if (typeof predicate === 'boolean') return;
 	    if (typeof predicate === 'function') return;
 	    if (typeof predicate === 'number') {
 	      predicate = predicate.toString();
@@ -749,14 +752,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	        checkTagLocal(element, path, ignore);
 	      }
 
-	      if (path.length === length) {
-	        checkClassChild(element, path, ignore);
-	      }
-	      if (path.length === length) {
-	        checkAttributeChild(element, path, ignore);
-	      }
-	      if (path.length === length) {
-	        checkTagChild(element, path, ignore);
+	      if (ignore.childSelector !== true) {
+	        if (path.length === length) {
+	          checkClassChild(element, path, ignore);
+	        }
+	        if (path.length === length) {
+	          checkAttributeChild(element, path, ignore);
+	        }
+	        if (path.length === length) {
+	          checkTagChild(element, path, ignore);
+	        }
 	      }
 	    }
 
