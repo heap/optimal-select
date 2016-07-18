@@ -49,6 +49,7 @@ export default function match (node, options) {
       ignoreClass = true
     }
     var predicate = ignore[type]
+    if (typeof predicate === 'boolean') return
     if (typeof predicate === 'function') return
     if (typeof predicate === 'number') {
       predicate = predicate.toString()
@@ -87,14 +88,16 @@ export default function match (node, options) {
         checkTagLocal(element, path, ignore)
       }
 
-      if (path.length === length) {
-        checkClassChild(element, path, ignore)
-      }
-      if (path.length === length) {
-        checkAttributeChild(element, path, ignore)
-      }
-      if (path.length === length) {
-        checkTagChild(element, path, ignore)
+      if (ignore.childSelector !== true) {
+        if (path.length === length) {
+          checkClassChild(element, path, ignore)
+        }
+        if (path.length === length) {
+          checkAttributeChild(element, path, ignore)
+        }
+        if (path.length === length) {
+          checkTagChild(element, path, ignore)
+        }
       }
     }
 
