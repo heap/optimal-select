@@ -737,16 +737,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (skipChecks(element) !== true) {
 	      // global
 	      if (checkId(element, path, ignore)) break;
-	      if (checkClassGlobal(element, path, ignore, root)) break;
 	      if (checkAttributeGlobal(element, path, ignore, root)) break;
+	      if (checkClassGlobal(element, path, ignore, root)) break;
 	      if (checkTagGlobal(element, path, ignore, root)) break;
 
 	      // local
-	      checkClassLocal(element, path, ignore);
+	      checkAttributeLocal(element, path, ignore);
 
 	      // define only one selector each iteration
 	      if (path.length === length) {
-	        checkAttributeLocal(element, path, ignore);
+	        checkClassLocal(element, path, ignore);
 	      }
 	      if (path.length === length) {
 	        checkTagLocal(element, path, ignore);
