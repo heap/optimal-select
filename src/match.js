@@ -181,16 +181,28 @@ function checkAttributeLocal (element, path, ignore) {
  */
 function checkAttributeChild (element, path, ignore) {
   const attributes = element.attributes
-  return Object.keys(attributes).some((key) => {
-    const attribute = attributes[key]
-    const attributeName = attribute.name
-    const attributeValue = attribute.value
-    if (checkIgnore(ignore.attribute, attributeName, attributeValue, defaultIgnore.attribute)) {
-      return false
-    }
-    const pattern = `[${attributeName}="${attributeValue}"]`
-    return checkChild(element, path, pattern)
-  })
+  return Object.keys(attributes)
+    .sort((key1, key2) => {
+      const attributeName1 = attributes[key1].name
+      const attributeName2 = attributes[key2].name
+      if (attributeName1.indexOf('data-') === 0 || attributeName2 === 'href') {
+        return -1
+      } else if (attributeName1 === 'href' || attributeName2.indexOf('data-') === 0) {
+        return 1
+      } else {
+        return 0
+      }
+    })
+    .some((key) => {
+      const attribute = attributes[key]
+      const attributeName = attribute.name
+      const attributeValue = attribute.value
+      if (checkIgnore(ignore.attribute, attributeName, attributeValue, defaultIgnore.attribute)) {
+        return false
+      }
+      const pattern = `[${attributeName}="${attributeValue}"]`
+      return checkChild(element, path, pattern)
+    })
 }
 
 /**
@@ -277,20 +289,32 @@ function checkClass (element, path, ignore, parent) {
  */
 function checkAttribute (element, path, ignore, parent) {
   const attributes = element.attributes
-  return Object.keys(attributes).some((key) => {
-    const attribute = attributes[key]
-    const attributeName = attribute.name
-    const attributeValue = attribute.value
-    if (checkIgnore(ignore.attribute, attributeName, attributeValue, defaultIgnore.attribute)) {
-      return false
-    }
-    const pattern = `[${attributeName}="${attributeValue}"]`
-    const matches = parent.querySelectorAll(pattern)
-    if (matches.length === 1) {
-      path.unshift(pattern)
-      return true
-    }
-  })
+  return Object.keys(attributes)
+    .sort((key1, key2) => {
+      const attributeName1 = attributes[key1].name
+      const attributeName2 = attributes[key2].name
+      if (attributeName1.indexOf('data-') === 0 || attributeName2 === 'href') {
+        return -1
+      } else if (attributeName1 === 'href' || attributeName2.indexOf('data-') === 0) {
+        return 1
+      } else {
+        return 0
+      }
+    })
+    .some((key) => {
+      const attribute = attributes[key]
+      const attributeName = attribute.name
+      const attributeValue = attribute.value
+      if (checkIgnore(ignore.attribute, attributeName, attributeValue, defaultIgnore.attribute)) {
+        return false
+      }
+      const pattern = `[${attributeName}="${attributeValue}"]`
+      const matches = parent.querySelectorAll(pattern)
+      if (matches.length === 1) {
+        path.unshift(pattern)
+        return true
+      }
+    })
 }
 
 /**
