@@ -844,7 +844,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	function checkAttributeChild(element, path, ignore) {
 	  var attributes = element.attributes;
-	  return Object.keys(attributes).some(function (key) {
+	  return Object.keys(attributes).sort(function (key1, key2) {
+	    var attributeName1 = attributes[key1].name;
+	    var attributeName2 = attributes[key2].name;
+	    if (attributeName1.indexOf('data-') === 0 || attributeName2 === 'href') {
+	      return -1;
+	    } else if (attributeName1 === 'href' || attributeName2.indexOf('data-') === 0) {
+	      return 1;
+	    } else {
+	      return 0;
+	    }
+	  }).some(function (key) {
 	    var attribute = attributes[key];
 	    var attributeName = attribute.name;
 	    var attributeValue = attribute.value;
@@ -940,7 +950,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	function checkAttribute(element, path, ignore, parent) {
 	  var attributes = element.attributes;
-	  return Object.keys(attributes).some(function (key) {
+	  return Object.keys(attributes).sort(function (key1, key2) {
+	    var attributeName1 = attributes[key1].name;
+	    var attributeName2 = attributes[key2].name;
+	    if (attributeName1.indexOf('data-') === 0 || attributeName2 === 'href') {
+	      return -1;
+	    } else if (attributeName1 === 'href' || attributeName2.indexOf('data-') === 0) {
+	      return 1;
+	    } else {
+	      return 0;
+	    }
+	  }).some(function (key) {
 	    var attribute = attributes[key];
 	    var attributeName = attribute.name;
 	    var attributeValue = attribute.value;
