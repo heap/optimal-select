@@ -196,7 +196,8 @@ function checkAttributeChild (element, path, ignore) {
     .some((key) => {
       const attribute = attributes[key]
       const attributeName = attribute.name
-      const attributeValue = attribute.value
+      // FIXME: Downstream hierarchy parsing is broken. For now, just omit double-quotes.
+      const attributeValue = attribute.value.replace(/"/g, '')
       if (checkIgnore(ignore.attribute, attributeName, attributeValue, defaultIgnore.attribute)) {
         return false
       }
@@ -304,7 +305,8 @@ function checkAttribute (element, path, ignore, parent) {
     .some((key) => {
       const attribute = attributes[key]
       const attributeName = attribute.name
-      const attributeValue = attribute.value
+      // FIXME: Downstream hierarchy parsing is broken. For now, just omit double-quotes.
+      const attributeValue = attribute.value.replace(/"/g, '')
       if (checkIgnore(ignore.attribute, attributeName, attributeValue, defaultIgnore.attribute)) {
         return false
       }
