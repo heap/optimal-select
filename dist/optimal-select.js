@@ -857,7 +857,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }).some(function (key) {
 	    var attribute = attributes[key];
 	    var attributeName = attribute.name;
-	    var attributeValue = attribute.value;
+	    // FIXME: Downstream hierarchy parsing is broken. For now, just omit double-quotes.
+	    var attributeValue = attribute.value.replace(/"/g, '');
 	    if (checkIgnore(ignore.attribute, attributeName, attributeValue, defaultIgnore.attribute)) {
 	      return false;
 	    }
@@ -963,7 +964,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }).some(function (key) {
 	    var attribute = attributes[key];
 	    var attributeName = attribute.name;
-	    var attributeValue = attribute.value;
+	    // FIXME: Downstream hierarchy parsing is broken. For now, just omit double-quotes.
+	    var attributeValue = attribute.value.replace(/"/g, '');
 	    if (checkIgnore(ignore.attribute, attributeName, attributeValue, defaultIgnore.attribute)) {
 	      return false;
 	    }
