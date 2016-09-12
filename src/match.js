@@ -101,12 +101,17 @@ export default function match (node, options) {
       }
     }
 
+    if (element === node && path.length === 0) {
+      var elementSelector = element.tagName.toLowerCase()
+      var className = element.getAttribute('class')
+      if (className) {
+        elementSelector += `.${className.trim().replace(/\s+/g, '.')}`
+      }
+      path.unshift(elementSelector)
+    }
+
     element = element.parentNode
     length = path.length
-  }
-
-  if (element === root) {
-    path.unshift('*')
   }
 
   return path.join(' ')
