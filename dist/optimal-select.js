@@ -671,6 +671,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 	/**
+	 *
+	 * Score attributes by their "robustness", so that
+	 * auto-generated selectors prioritize less finicky attributes.
+	 */
+	function scoreAttribute(attribute) {
+	  if (attribute.indexOf('data-') === 0) return -1;
+	  if (attribute === 'href') return 1;
+	  if (attribute === 'src') return 2;
+	  if (attribute === 'alt' || attribute === 'title') return 3;
+	  return 0;
+	}
+
+	/**
 	 * Get the path of the element
 	 * @param  {HTMLElement} node    - [description]
 	 * @param  {Object}      options - [description]
@@ -852,13 +865,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return Object.keys(attributes).sort(function (key1, key2) {
 	    var attributeName1 = attributes[key1].name;
 	    var attributeName2 = attributes[key2].name;
-	    if (attributeName1.indexOf('data-') === 0 || attributeName2 === 'href') {
-	      return -1;
-	    } else if (attributeName1 === 'href' || attributeName2.indexOf('data-') === 0) {
-	      return 1;
-	    } else {
-	      return 0;
-	    }
+	    return scoreAttribute(attributeName1) - scoreAttribute(attributeName2);
 	  }).some(function (key) {
 	    var attribute = attributes[key];
 	    var attributeName = attribute.name;
@@ -959,13 +966,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return Object.keys(attributes).sort(function (key1, key2) {
 	    var attributeName1 = attributes[key1].name;
 	    var attributeName2 = attributes[key2].name;
-	    if (attributeName1.indexOf('data-') === 0 || attributeName2 === 'href') {
-	      return -1;
-	    } else if (attributeName1 === 'href' || attributeName2.indexOf('data-') === 0) {
-	      return 1;
-	    } else {
-	      return 0;
-	    }
+	    return scoreAttribute(attributeName1) - scoreAttribute(attributeName2);
 	  }).some(function (key) {
 	    var attribute = attributes[key];
 	    var attributeName = attribute.name;
