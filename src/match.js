@@ -15,6 +15,19 @@ const defaultIgnore = {
 }
 
 /**
+ *
+ * Score attributes by their "robustness", so that
+ * auto-generated selectors prioritize less finicky attributes.
+ */
+function scoreAttribute (attribute) {
+  if (attribute.indexOf('data-') === 0) return -1
+  if (attribute === 'href') return 1
+  if (attribute === 'src') return 2
+  if (attribute === 'alt' || attribute === 'title') return 3
+  return 0
+}
+
+/**
  * Get the path of the element
  * @param  {HTMLElement} node    - [description]
  * @param  {Object}      options - [description]
@@ -190,13 +203,7 @@ function checkAttributeChild (element, path, ignore) {
     .sort((key1, key2) => {
       const attributeName1 = attributes[key1].name
       const attributeName2 = attributes[key2].name
-      if (attributeName1.indexOf('data-') === 0 || attributeName2 === 'href') {
-        return -1
-      } else if (attributeName1 === 'href' || attributeName2.indexOf('data-') === 0) {
-        return 1
-      } else {
-        return 0
-      }
+      return scoreAttribute(attributeName1) - scoreAttribute(attributeName2)
     })
     .some((key) => {
       const attribute = attributes[key]
@@ -299,13 +306,7 @@ function checkAttribute (element, path, ignore, parent) {
     .sort((key1, key2) => {
       const attributeName1 = attributes[key1].name
       const attributeName2 = attributes[key2].name
-      if (attributeName1.indexOf('data-') === 0 || attributeName2 === 'href') {
-        return -1
-      } else if (attributeName1 === 'href' || attributeName2.indexOf('data-') === 0) {
-        return 1
-      } else {
-        return 0
-      }
+      return scoreAttribute(attributeName1) - scoreAttribute(attributeName2)
     })
     .some((key) => {
       const attribute = attributes[key]
