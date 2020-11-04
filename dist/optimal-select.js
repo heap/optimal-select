@@ -52,7 +52,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
@@ -75,9 +75,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.optimize = _optimize3.default;
 	exports.default = _select3.default;
 
-/***/ },
+/***/ }),
 /* 1 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {'use strict';
 
@@ -85,12 +85,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; }; /**
-	                                                                                                                                                                                                                                                   * # Select
-	                                                                                                                                                                                                                                                   *
-	                                                                                                                                                                                                                                                   * Construct a unique CSS queryselector to access the selected DOM element(s).
-	                                                                                                                                                                                                                                                   * Applies different matching and optimization strategies for efficiency.
-	                                                                                                                                                                                                                                                   */
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; /**
+	                                                                                                                                                                                                                                                                               * # Select
+	                                                                                                                                                                                                                                                                               *
+	                                                                                                                                                                                                                                                                               * Construct a unique CSS queryselector to access the selected DOM element(s).
+	                                                                                                                                                                                                                                                                               * Applies different matching and optimization strategies for efficiency.
+	                                                                                                                                                                                                                                                                               */
 
 	exports.default = getQuerySelector;
 	exports.getSingleSelector = getSingleSelector;
@@ -117,7 +117,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @return {string}                    - [description]
 	 */
 	function getQuerySelector(input) {
-	  var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+	  var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
 	  if (Array.isArray(input)) {
 	    return getMultiSelector(input, options);
@@ -224,17 +224,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
-/***/ },
+/***/ }),
 /* 2 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 
 	var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
@@ -364,13 +362,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	      // using right to left execution => https://github.com/fb55/css-select#how-does-it-work
 
-	      var _getInstructions = getInstructions(selectors);
-
-	      var _getInstructions2 = _toArray(_getInstructions);
-
-	      var discover = _getInstructions2[0];
-
-	      var ascendings = _getInstructions2.slice(1);
+	      var _getInstructions = getInstructions(selectors),
+	          _getInstructions2 = _toArray(_getInstructions),
+	          discover = _getInstructions2[0],
+	          ascendings = _getInstructions2.slice(1);
 
 	      var total = ascendings.length;
 	      return discover(this).filter(function (node) {
@@ -414,160 +409,129 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return selectors.split(' ').reverse().map(function (selector, step) {
 	    var discover = step === 0;
 
-	    var _selector$split = selector.split(':');
-
-	    var _selector$split2 = _slicedToArray(_selector$split, 2);
-
-	    var type = _selector$split2[0];
-	    var pseudo = _selector$split2[1];
-
+	    var _selector$split = selector.split(':'),
+	        _selector$split2 = _slicedToArray(_selector$split, 2),
+	        type = _selector$split2[0],
+	        pseudo = _selector$split2[1];
 
 	    var validate = null;
 	    var instruction = null;
 
-	    (function () {
-	      switch (true) {
+	    switch (true) {
 
-	        // child: '>'
-	        case />/.test(type):
-	          instruction = function checkParent(node) {
-	            return function (validate) {
-	              return validate(node.parent) && node.parent;
-	            };
+	      // child: '>'
+	      case />/.test(type):
+	        instruction = function checkParent(node) {
+	          return function (validate) {
+	            return validate(node.parent) && node.parent;
 	          };
-	          break;
+	        };
+	        break;
 
-	        // class: '.'
-	        case /^\./.test(type):
-	          var names = type.substr(1).split('.');
-	          validate = function validate(node) {
-	            var nodeClassName = node.attribs.class;
-	            return nodeClassName && names.every(function (name) {
-	              return nodeClassName.indexOf(name) > -1;
-	            });
-	          };
-	          instruction = function checkClass(node, root) {
-	            if (discover) {
-	              return node.getElementsByClassName(names.join(' '));
+	      // class: '.'
+	      case /^\./.test(type):
+	        var names = type.substr(1).split('.');
+	        validate = function validate(node) {
+	          var nodeClassName = node.attribs.class;
+	          return nodeClassName && names.every(function (name) {
+	            return nodeClassName.indexOf(name) > -1;
+	          });
+	        };
+	        instruction = function checkClass(node, root) {
+	          if (discover) {
+	            return node.getElementsByClassName(names.join(' '));
+	          }
+	          return typeof node === 'function' ? node(validate) : getAncestor(node, root, validate);
+	        };
+	        break;
+
+	      // attribute: '[key="value"]'
+	      case /^\[/.test(type):
+	        var _type$replace$split = type.replace(/\[|\]|"/g, '').split('='),
+	            _type$replace$split2 = _slicedToArray(_type$replace$split, 2),
+	            attributeKey = _type$replace$split2[0],
+	            attributeValue = _type$replace$split2[1];
+
+	        validate = function validate(node) {
+	          var hasAttribute = Object.keys(node.attribs).indexOf(attributeKey) > -1;
+	          if (hasAttribute) {
+	            // regard optional attributeValue
+	            if (!attributeValue || node.attribs[attributeKey] === attributeValue) {
+	              return true;
 	            }
-	            return typeof node === 'function' ? node(validate) : getAncestor(node, root, validate);
-	          };
-	          break;
-
-	        // attribute: '[key="value"]'
-	        case /^\[/.test(type):
-	          var _type$replace$split = type.replace(/\[|\]|"/g, '').split('=');
-
-	          var _type$replace$split2 = _slicedToArray(_type$replace$split, 2);
-
-	          var attributeKey = _type$replace$split2[0];
-	          var attributeValue = _type$replace$split2[1];
-
-	          validate = function validate(node) {
-	            var hasAttribute = Object.keys(node.attribs).indexOf(attributeKey) > -1;
-	            if (hasAttribute) {
-	              // regard optional attributeValue
-	              if (!attributeValue || node.attribs[attributeKey] === attributeValue) {
-	                return true;
+	          }
+	          return false;
+	        };
+	        instruction = function checkAttribute(node, root) {
+	          if (discover) {
+	            var NodeList = [];
+	            traverseDescendants([node], function (descendant) {
+	              if (validate(descendant)) {
+	                NodeList.push(descendant);
 	              }
-	            }
-	            return false;
-	          };
-	          instruction = function checkAttribute(node, root) {
-	            if (discover) {
-	              var _ret2 = function () {
-	                var NodeList = [];
-	                traverseDescendants([node], function (descendant) {
-	                  if (validate(descendant)) {
-	                    NodeList.push(descendant);
-	                  }
-	                });
-	                return {
-	                  v: NodeList
-	                };
-	              }();
+	            });
+	            return NodeList;
+	          }
+	          return typeof node === 'function' ? node(validate) : getAncestor(node, root, validate);
+	        };
+	        break;
 
-	              if ((typeof _ret2 === 'undefined' ? 'undefined' : _typeof(_ret2)) === "object") return _ret2.v;
-	            }
-	            return typeof node === 'function' ? node(validate) : getAncestor(node, root, validate);
-	          };
-	          break;
+	      // id: '#'
+	      case /^#/.test(type):
+	        var id = type.substr(1);
+	        validate = function validate(node) {
+	          return node.attribs.id === id;
+	        };
+	        instruction = function checkId(node, root) {
+	          if (discover) {
+	            var NodeList = [];
+	            traverseDescendants([node], function (descendant, done) {
+	              if (validate(descendant)) {
+	                NodeList.push(descendant);
+	                done();
+	              }
+	            });
+	            return NodeList;
+	          }
+	          return typeof node === 'function' ? node(validate) : getAncestor(node, root, validate);
+	        };
+	        break;
 
-	        // id: '#'
-	        case /^#/.test(type):
-	          var id = type.substr(1);
-	          validate = function validate(node) {
-	            return node.attribs.id === id;
-	          };
-	          instruction = function checkId(node, root) {
-	            if (discover) {
-	              var _ret3 = function () {
-	                var NodeList = [];
-	                traverseDescendants([node], function (descendant, done) {
-	                  if (validate(descendant)) {
-	                    NodeList.push(descendant);
-	                    done();
-	                  }
-	                });
-	                return {
-	                  v: NodeList
-	                };
-	              }();
+	      // universal: '*'
+	      case /\*/.test(type):
+	        validate = function validate(node) {
+	          return true;
+	        };
+	        instruction = function checkUniversal(node, root) {
+	          if (discover) {
+	            var NodeList = [];
+	            traverseDescendants([node], function (descendant) {
+	              return NodeList.push(descendant);
+	            });
+	            return NodeList;
+	          }
+	          return typeof node === 'function' ? node(validate) : getAncestor(node, root, validate);
+	        };
+	        break;
 
-	              if ((typeof _ret3 === 'undefined' ? 'undefined' : _typeof(_ret3)) === "object") return _ret3.v;
-	            }
-	            return typeof node === 'function' ? node(validate) : getAncestor(node, root, validate);
-	          };
-	          break;
-
-	        // universal: '*'
-	        case /\*/.test(type):
-	          validate = function validate(node) {
-	            return true;
-	          };
-	          instruction = function checkUniversal(node, root) {
-	            if (discover) {
-	              var _ret4 = function () {
-	                var NodeList = [];
-	                traverseDescendants([node], function (descendant) {
-	                  return NodeList.push(descendant);
-	                });
-	                return {
-	                  v: NodeList
-	                };
-	              }();
-
-	              if ((typeof _ret4 === 'undefined' ? 'undefined' : _typeof(_ret4)) === "object") return _ret4.v;
-	            }
-	            return typeof node === 'function' ? node(validate) : getAncestor(node, root, validate);
-	          };
-	          break;
-
-	        // tag: '...'
-	        default:
-	          validate = function validate(node) {
-	            return node.name === type;
-	          };
-	          instruction = function checkTag(node, root) {
-	            if (discover) {
-	              var _ret5 = function () {
-	                var NodeList = [];
-	                traverseDescendants([node], function (descendant) {
-	                  if (validate(descendant)) {
-	                    NodeList.push(descendant);
-	                  }
-	                });
-	                return {
-	                  v: NodeList
-	                };
-	              }();
-
-	              if ((typeof _ret5 === 'undefined' ? 'undefined' : _typeof(_ret5)) === "object") return _ret5.v;
-	            }
-	            return typeof node === 'function' ? node(validate) : getAncestor(node, root, validate);
-	          };
-	      }
-	    })();
+	      // tag: '...'
+	      default:
+	        validate = function validate(node) {
+	          return node.name === type;
+	        };
+	        instruction = function checkTag(node, root) {
+	          if (discover) {
+	            var NodeList = [];
+	            traverseDescendants([node], function (descendant) {
+	              if (validate(descendant)) {
+	                NodeList.push(descendant);
+	              }
+	            });
+	            return NodeList;
+	          }
+	          return typeof node === 'function' ? node(validate) : getAncestor(node, root, validate);
+	        };
+	    }
 
 	    if (!pseudo) {
 	      return instruction;
@@ -648,9 +612,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
-/***/ },
+/***/ }),
 /* 3 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	'use strict';
 
@@ -672,11 +636,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	/**
 	 *
-	 * Score attributes by their "robustness", so that
-	 * auto-generated selectors prioritize less finicky attributes.
+	 * Score attributes by their "robustness", so that auto-generated selectors prioritize less finicky attributes. Attributes with lower
+	 * scores are prioritized above attributes wit higher scores.
 	 */
 	function scoreAttribute(attribute) {
 	  if (attribute.indexOf('data-') === 0) return -1;
+	  if (attribute === 'aria-label') return -1;
 	  if (attribute === 'href') return 1;
 	  if (attribute === 'src') return 2;
 	  if (attribute === 'alt' || attribute === 'title') return 3;
@@ -694,12 +659,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	  var element = node;
 	  var length = path.length;
 
-	  var _options$root = options.root;
-	  var root = _options$root === undefined ? document : _options$root;
-	  var _options$skip = options.skip;
-	  var skip = _options$skip === undefined ? null : _options$skip;
-	  var _options$ignore = options.ignore;
-	  var ignore = _options$ignore === undefined ? {} : _options$ignore;
+	  var _options$root = options.root,
+	      root = _options$root === undefined ? document : _options$root,
+	      _options$skip = options.skip,
+	      skip = _options$skip === undefined ? null : _options$skip,
+	      _options$ignore = options.ignore,
+	      ignore = _options$ignore === undefined ? {} : _options$ignore;
 
 
 	  var skipCompare = skip && (Array.isArray(skip) ? skip : [skip]).map(function (entry) {
@@ -737,12 +702,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  });
 
 	  if (ignoreClass) {
-	    (function () {
-	      var ignoreAttribute = ignore.attribute;
-	      ignore.attribute = function (name, value, defaultPredicate) {
-	        return ignore.class(value) || ignoreAttribute && ignoreAttribute(name, value, defaultPredicate);
-	      };
-	    })();
+	    var ignoreAttribute = ignore.attribute;
+	    ignore.attribute = function (name, value, defaultPredicate) {
+	      return ignore.class(value) || ignoreAttribute && ignoreAttribute(name, value, defaultPredicate);
+	    };
 	  }
 
 	  while (element !== root) {
@@ -1045,9 +1008,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 	module.exports = exports['default'];
 
-/***/ },
+/***/ }),
 /* 4 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {'use strict';
 
@@ -1069,7 +1032,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @return {string}               - [description]
 	 */
 	function optimize(selector, element) {
-	  var options = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
+	  var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
 
 
 	  var globalModified = (0, _adapt2.default)(element, options);
@@ -1210,7 +1173,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
-/***/ }
+/***/ })
 /******/ ])
 });
 ;
