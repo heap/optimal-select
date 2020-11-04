@@ -16,11 +16,12 @@ const defaultIgnore = {
 
 /**
  *
- * Score attributes by their "robustness", so that
- * auto-generated selectors prioritize less finicky attributes.
+ * Score attributes by their "robustness", so that auto-generated selectors prioritize less finicky attributes. Attributes with lower
+ * scores are prioritized above attributes wit higher scores.
  */
 function scoreAttribute (attribute) {
   if (attribute.indexOf('data-') === 0) return -1
+  if (attribute === 'aria-label') return -1
   if (attribute === 'href') return 1
   if (attribute === 'src') return 2
   if (attribute === 'alt' || attribute === 'title') return 3
